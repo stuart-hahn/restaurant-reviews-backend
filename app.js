@@ -4,6 +4,8 @@ const ejs = require("ejs");
 const path = require("path");
 require("dotenv").config();
 
+const Restaurant = require("./models/restaurant");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -25,6 +27,19 @@ app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
   res.render("home");
+});
+
+app.get("/restaurant", async (req, res) => {
+  const restaurant = new Restaurant({
+    title: "Poe's",
+    price: "$$",
+    description:
+      "An Edgar Allen Poe themed restaurant specializing in burgers.",
+    location: "Atlantic Beach, Florida",
+  });
+
+  await restaurant.save();
+  res.send(restaurant);
 });
 
 app.listen(PORT, () => {
